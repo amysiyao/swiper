@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            轮播图
+        </title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="wrap" style="left: 0px;">
+                <img src="./img/1.jpg" alt="">
+                <img src="./img/2.jpg" alt="">
+                <img src="./img/3.jpg" alt="">
+            </div>
+            <div class="button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="javascript:;" class="arrow arrow_left">&lt;</a>
+            <a href="javascript:;" class="arrow arrow_right">&gt;</a>
+        </div>
+    </body>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        a{
+            text-decoration: none;
+        }
+        .container{
+            position: relative;
+            width: 760px;
+            height: 380px;
+            margin: 100px auto 0 auto;
+            box-shadow: 0 0 5px gray;
+            overflow: hidden;
+        }
+        .wrap{
+            position:absolute;
+            width: 2280px;
+            height: 380px;
+            z-index:1;
+        }
+        .container .wrap img{
+            float: left;
+            width: 760px;
+            height: 380px;
+        }
+        .container .button{
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            width: 200px;
+            bottom: 10px;
+            left: 280px;
+        }
+        .container .button span {
+            margin-left: 15px;
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.5;
+            text-align: center;
+            color:white;
+            cursor: pointer;
+            background-color: white;
+        }
+        .container .button span.on{
+            opacity: 1;
+        }
+        .container .arrow {
+            position: absolute;
+            top: 35%;
+            color: white;
+            padding:20px 10px;
+            font-size: 20px;
+            z-index: 2;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .container .arrow_left {
+            left: 10px;
+        }
+        .container .arrow_right {
+            right: 10px;
+        }
+        .container:hover .arrow {
+            display: block;
+        }
+    </style>
+    <script>
+        var index=0;
+        var wrap=document.querySelector(".wrap");
+        var next = document.querySelector(".arrow_right");
+        var prev = document.querySelector(".arrow_left");
+
+        //小圆点
+        var dots=document.getElementsByTagName("span");
+        function showCurrentdot(){
+            for(var i=0,len=dots.length;i<len;i++){
+                dots[i].className="";
+            }
+            dots[index].className="on";
+        }
+        showCurrentdot();
+        next.onclick=function (){
+            next_pic();
+        }
+        prev.onclick=function (){
+            prev_pic();
+        }
+        //按钮
+        function next_pic(){
+            index++;
+            if(index>2){
+                index=0
+            }
+            showCurrentdot();
+            var newLeft;
+            if(wrap.style.left=="-1520px"){
+                newLeft=0;}
+            else {
+                newLeft=parseInt(wrap.style.left)-760
+            }
+            wrap.style.left=newLeft+"px";
+            console.log(wrap.style.left)
+        }
+
+        function prev_pic(){
+            index--;
+            if(index<0){
+                index=2;
+            }
+            showCurrentdot();
+            var newLeft;
+            if(wrap.style.left=="0px"){
+                newLeft=-1520;}
+            else {
+                newLeft=parseInt(wrap.style.left)+760
+            }
+            wrap.style.left=newLeft+"px";
+            console.log(wrap.style.left)
+        }
+        //定时器
+        var timer=null;
+        function autoplay(){
+            timer=setInterval(function(){
+                next_pic()
+            },2000);
+        }
+        autoplay();
+
+        var  container=document.querySelector(".container");
+        container.onmouseenter=function(){
+            clearInterval(timer);
+        }
+        container.onmouseleave=function(){
+            autoplay();
+        }
+
+
+
+        for(var i=0,len=dots.length;i<len;i++){
+            (function(i){
+                dots[i].onclick = function () {
+                    wrap.style.left = -( i * 760)+"px";
+                    console.log(wrap.style.left);
+                    index = i;
+                    showCurrentdot();
+                } 
+            })(i)
+        }
+    </script>
+</html>
